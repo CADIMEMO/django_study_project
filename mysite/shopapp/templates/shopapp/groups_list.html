@@ -1,0 +1,20 @@
+{% extends 'shopapp/base.html' %}
+
+{% block title %}
+New Block
+{% endblock %}
+
+{% block body %}
+    <h1>Groups:</h1>
+    <div>
+        {%if not groups%}
+            <h3>No groups</h3>
+        {%else%}
+            <ul>
+                {%for group in groups%}
+                    <li>{{group}}</li>
+                {%endfor%}
+            </ul>
+        {%endif%}
+    </div>
+{% endblock %}
