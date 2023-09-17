@@ -13,6 +13,14 @@ class Product(models.Model):
     discount = models.SmallIntegerField(default=8)
     create_at = models.DateTimeField(auto_now_add=True)
     archieved = models.BooleanField(default=False)
+    @property
+    def description_short(self):
+        if len(self.description) < 48:
+            return self.description
+        return self.description[:48] + '...'
+
+    def __str__(self):
+        return f'Product {self.pk}, name = {self.name!r}'
 
 
 class Order(models.Model):
