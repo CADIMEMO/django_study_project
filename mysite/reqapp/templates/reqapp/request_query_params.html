@@ -1,0 +1,16 @@
+{%extends 'reqapp/base.html'%}
+{%block Title%}
+    demo req params
+{% endblock %}
+
+{%block body%}
+    <h1>req =  {{request.method}}</h1>
+    <h2>Hello {% firstof request.GET.name 'User' %}</h2>
+    <div>
+        <pre>
+            a = '{{a}}'
+            b = '{{b}}'
+            result = '{{result}}'
+        </pre>
+    </div>
+{% endblock %}
