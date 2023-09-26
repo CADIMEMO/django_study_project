@@ -39,14 +39,16 @@ class ThrottlingMiddleware:
 
         if not user_ip in self.ips:
             self.ips[user_ip] = datetime.datetime.now()
-        if self.ips[user_ip] + datetime.timedelta(minutes=1) < datetime.datetime.now():
-            self.ips[user_ip] = datetime.datetime.now()
-            response = self.get_response(request)
-            return response
         else:
-            print(datetime.datetime.now())
-            print('Ошибка. Запросы чаще чем раз в минуту')
-            raise Exception('Ошибка. Запросы чаще чем раз в минуту')
+            if self.ips[user_ip] + datetime.timedelta(seconds=3) < datetime.datetime.now():
+                self.ips[user_ip] = datetime.datetime.now()
+                response = self.get_response(request)
+                return response
+            else:
+                self.ips[user_ip] = datetime.datetime.now()
+                print(datetime.datetime.now())
+                print('Ошибка. Запросы чаще чем раз в 3 секунды')
+                raise Exception('Ошибка. Запросы чаще чем раз в 3 секунды')
 
 
 

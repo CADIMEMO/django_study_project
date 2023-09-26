@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shopapp.apps.ShopappConfig',
     'reqapp.apps.ReqappConfig',
+
+
 ]
 
 MIDDLEWARE = [
@@ -51,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'reqapp.middlewares.setup_useragent_middleware',
     'reqapp.middlewares.CountReqMiddleware',
-    'reqapp.middlewares.ThrottlingMiddleware',
+    # 'reqapp.middlewares.ThrottlingMiddleware',
 
 ]
 
