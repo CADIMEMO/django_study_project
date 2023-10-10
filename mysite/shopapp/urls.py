@@ -1,14 +1,35 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import shop_index, groups_list, products_list, orders_list, create_product, create_an_order
+from .views import (ShopIndexView,
+                    GroupsListView,
+                    ProductDelailsView,
+                    ProductsListView,
+                    OrdersListView,
+                    OrderDetailView,
+                    ProductCreateView,
+                    ProductUpdateView,
+                    ProductDeleteView,
+                    OrderDeleteView,
+                    OrderUpdateView,
+                    OrderCreateView)
+
 app_name = 'shopapp'
 
 urlpatterns = [
-    path('', shop_index, name='index'),
-    path('groups/', groups_list, name='groups_list'),
-    path('products/', products_list, name='products_list'),
-    path('orders/', orders_list, name='orders_list'),
-    path('create/', create_product, name='create_product'),
-    path('orders/make_order/', create_an_order, name='create_an_order')
+    path('', ShopIndexView.as_view(), name='index'),
+    path('groups/', GroupsListView.as_view(), name='groups_list'),
+
+    path('products/', ProductsListView.as_view(), name='products_list'),
+    path('products/<int:pk>/', ProductDelailsView.as_view(), name='products_details'),
+    path('products/<int:pk>/update/', ProductUpdateView.as_view(), name='product_update'),
+    path('products/<int:pk>/delete/', ProductDeleteView.as_view(), name='product_delete'),
+    path('products/create/', ProductCreateView.as_view(), name='create_a_product'),
+
+    path('orders/', OrdersListView.as_view(), name='orders_list'),
+    path('orders/make_order/', OrderCreateView.as_view(), name='create_an_order'),
+    path('orders/<int:pk>', OrderDetailView.as_view(), name='order_details'),
+    path('orders/<int:pk>/delete', OrderDeleteView.as_view(), name='order_delete'),
+    path('orders/<int:pk>/update', OrderUpdateView.as_view(), name='order_update'),
+
 
 ]

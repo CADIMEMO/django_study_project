@@ -10,7 +10,8 @@
     <div>
       {%for product in products%}
       <div>
-        <p> Name: {{product.name}}</p>
+        <p><a href="{% url 'shopapp:products_details'  pk=product.pk %}">Name: {{product.name}}
+        </a></p>
         <p>Price: {{product.price}}</p>
         <p>Discount: {%firstof product.discount 'no discount'%}</p>
       </div>
@@ -20,8 +21,8 @@
     <h3>No products</h3>
   {%endif%}
 <div>
-  <a href="{% url 'shopapp:create_product'%}">
-    create a new product
+  <a href="{% url 'shopapp:create_a_product' %}">
+    create a new product (new)
   </a>
 </div>
 {%endblock%}

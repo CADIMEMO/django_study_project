@@ -1,0 +1,24 @@
+{% extends 'shopapp/base.html' %}
+
+{% block title %}
+ confirm archived {{ object.name }}
+{% endblock %}
+
+{% block body %}
+    <h1>Are you sure you want to archived {{object.name}}?</h1>
+
+    <br>
+    <div>
+        <a href="{% url 'shopapp:products_details' pk=object.pk %}">
+            return
+        </a>
+    </div>
+    <br>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">delete</button>
+        </form>
+    </div>
+{% endblock %}
