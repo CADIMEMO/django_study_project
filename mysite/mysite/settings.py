@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shopapp.apps.ShopappConfig',
     'reqapp.apps.ReqappConfig',
+    'myauth.apps.MyauthConfig',
 
 
 ]
