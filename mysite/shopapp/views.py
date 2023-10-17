@@ -2,8 +2,8 @@ from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
 from timeit import default_timer
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-
-from django.contrib.auth.models import Group
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import Group, User
 from .models import Product, Order
 from .forms import ProductForm, OrderForm
 from django.views import View
@@ -15,10 +15,12 @@ from django.views.generic import (TemplateView,
                                   DeleteView)
 from .forms import GroupForm
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = 'shopapp.delete_product'
     model = Product
     success_url = reverse_lazy('shopapp:products_list')
 
@@ -28,11 +30,13 @@ class ProductDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(success_url)
 
-class OrderDeleteView(DeleteView):
+class OrderDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = 'shopapp.delete_order'
     model = Order
     success_url = reverse_lazy('shopapp:orders_list')
 
-class OrderUpdateView(UpdateView):
+class OrderUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'shopapp.change_order'
     model = Order
     fields = 'delivery_adress', 'promocode', 'products',
     template_name_suffix = '_update_form'
@@ -43,7 +47,8 @@ class OrderUpdateView(UpdateView):
             kwargs={'pk': self.object.pk}
         )
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'shopapp.change_product'
     model = Product
     fields = 'name', 'price', 'description', 'discount'
     template_name_suffix = '_update_form'
@@ -54,10 +59,16 @@ class ProductUpdateView(UpdateView):
         )
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = 'shopapp.add_product'
+    # def test_func(self):
+    #     # return self.request.user.groups.filter(name='secret_group').exists()
+    #     return self.request.user.is_superuser
+
     model = Product
-    fields = 'name', 'price', 'description', 'discount'
+    fields = 'name', 'price', 'description', 'discount', 'created_by'
     success_url = reverse_lazy('shopapp:products_list')
+
 
 class ShopIndexView(View):
     def get(self, request: HttpRequest):
@@ -118,7 +129,7 @@ class OrderCreateView(CreateView):
 
 
 
-class OrdersListView(ListView):
+class OrdersListView(LoginRequiredMixin, ListView):
 
     queryset = (
         Order.objects
@@ -126,7 +137,8 @@ class OrdersListView(ListView):
         .prefetch_related('products')
     )
 
-class OrderDetailView(DetailView):
+class OrderDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = 'shopapp.view_order'
     queryset = (
         Order.objects
         .select_related('user')

@@ -1,0 +1,33 @@
+{% extends 'shopapp/base.html' %}
+
+{% block title %}
+    product detail
+{% endblock %}
+
+{% block body %}
+    <div>
+        <p>name {{object.name}}</P>
+        <p>description {{object.description}}</P>
+        <p>discount {{object.discount}}</P>
+        <p>archieved {{object.archieved}}</P>
+        <p>price {{object.price}}</P>
+    </div>
+    {% if perms.shopapp.change_product %}
+        <div>
+            <a href="{% url 'shopapp:product_update' pk=object.pk %}">update</a>
+
+        </div>
+    {% else %}
+        <p>no permission to update</p>
+    {% endif %}
+    {% if perms.shopapp.delete_product%}
+        <div>
+            <a href="{% url 'shopapp:product_delete' pk=object.pk %}">delete</a>
+        </div>
+    {% else %}
+        <p>no permission to delete</p>
+    {% endif %}
+
+
+
+{% endblock %}

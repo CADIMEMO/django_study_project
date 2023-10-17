@@ -12,7 +12,9 @@ class Product(models.Model):
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     discount = models.SmallIntegerField(default=8)
     create_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     archieved = models.BooleanField(default=False)
+
     @property
     def description_short(self):
         if len(self.description) < 48:

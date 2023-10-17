@@ -1,0 +1,18 @@
+{% extends 'shopapp/base.html'%}
+
+{% block title %}
+order details
+{% endblock %}
+
+{% block body %}
+    <h1>Order details</h1>
+    <p>{{object.user.id}}</p>
+    <p>Order #{{order.id}}</p>
+    <p>Ordered by {{order.user}}</p>
+    <p>promocode {{order.promocode}}</p>
+    <p>adress {{order.delivery_adress}}</p>
+    <p>created at {{order.created_at}}</p>
+    {% for product in order.products.all %}
+        <li>{{product.name}}</li>
+    {% endfor %}
+{% endblock %}
