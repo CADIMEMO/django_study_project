@@ -1,7 +1,7 @@
 from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
 from timeit import default_timer
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
 from .models import Product, Order
@@ -61,7 +61,7 @@ class ProductUpdateView(PermissionRequiredMixin, UpdateView):
 
 class ProductCreateView(CreateView, LoginRequiredMixin, PermissionRequiredMixin):
 
-    permission_required = 'shopapp.add_product'
+    # permission_required = 'shopapp.add_product'
     model = Product
     fields = 'name', 'price', 'description', 'discount'
 
@@ -73,11 +73,15 @@ class ProductCreateView(CreateView, LoginRequiredMixin, PermissionRequiredMixin)
     #     # return self.request.user.groups.filter(name='secret_group').exists()
     #     return self.request.user.is_superuser
 
+    # def form_valid(self, form):
+    #     product = form.save(commit=False)
+    #     product.created_by = self.request.user
+    #     response = super().form_valid(form)
+    #     return response
+    #
     def form_valid(self, form):
-        product = form.save(commit=False)
-        product.created_by = self.request.user
-        response = super().form_valid(form)
-        return response
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 
 
@@ -121,21 +125,27 @@ class ProductDelailsView(DetailView):
 class ProductsListView(ListView):
 
     template_name = 'shopapp/products-list.html'
-    # model = Product
+    model = Product
     context_object_name = 'products'
     queryset = Product.objects.filter(archieved=False)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['products'] = Product.objects.all()
-    #     return context
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = Product.objects.all()
+        return context
 
 
 class OrderCreateView(CreateView):
     model = Order
-    fields = 'delivery_adress', 'promocode', 'products', 'user'
+    fields = 'delivery_adress', 'promocode', 'products'
     template_name_suffix = '_make_an_order'
     success_url = reverse_lazy('shopapp:orders_list')
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
 
 
 
@@ -155,3 +165,37 @@ class OrderDetailView(PermissionRequiredMixin, DetailView):
         .select_related('user')
         .prefetch_related('products')
     )
+
+
+class ProductsDataExportsView(View):
+
+    def get(self, request: HttpRequest) -> JsonResponse:
+        products = Product.objects.order_by('pk').all()
+        products_data = [
+            {
+                'pk': product.pk,
+                'name': product.name,
+                'price': product.price,
+                'archieved': product.archieved,
+
+            }
+            for product in products
+        ]
+        return JsonResponse({'products': products_data})
+
+
+class OrdersDataExportView(View):
+
+    def get(self, request: HttpRequest) -> JsonResponse:
+        orders = Order.objects.all()
+        orders_data = [
+            {
+
+                'delivery_adress': order.delivery_adress,
+                'promocode': order.promocode,
+                'products': order.products
+
+            }
+            for order in orders
+        ]
+        return JsonResponse({'orders': orders_data})

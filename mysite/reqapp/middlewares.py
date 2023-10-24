@@ -5,7 +5,7 @@ import time
 def setup_useragent_middleware(get_response):
     print('initial call')
     def middleware(request: HttpRequest):
-        request.user_agent = request.META['HTTP_USER_AGENT']
+        request.user_agent = request.META.get('HTTP_USER_AGENT')
         response = get_response(request)
         return response
     return middleware
