@@ -82,6 +82,7 @@ class ProductsListViewTestCase(TestCase):
 
     fixtures = [
         'products-fixture.json',
+        'profiles-fixture.json'
     ]
 
     def test_products(self):
@@ -117,7 +118,8 @@ class OrderListViewTestCase(TestCase):
 
 class ProductsExportViewTestCase(TestCase):
     fixtures = [
-        'products-fixture.json'
+        'products-fixture.json',
+        'profiles-fixture.json'
     ]
 
     def test_get_products_view(self):
@@ -130,7 +132,7 @@ class ProductsExportViewTestCase(TestCase):
                 'name': product.name,
                 'price': str(product.price),
                 'archieved': product.archieved,
-                'created_by': int(product.created_by)
+                'created_by': str(product.created_by)
             }
             for product in products
         ]
@@ -181,20 +183,23 @@ class OrderDetailTestCase(TestCase):
 
 
 class OrdersDataExportTestCase(TestCase):
-    fixtures = ['orders-fixture.json']
+    fixtures = ['orders-fixture.json',
+                'profiles-fixture.json',
+                'products-fixture.json']
     def test_export_data(self):
         response = self.client.get(reverse('shopapp:orders-export'))
         orders = Order.objects.all()
         expected_data = [
             {
 
+                'pk': order.pk,
                 'delivery_adress': order.delivery_adress,
                 'promocode': order.promocode,
-                'products': order.products,
-                'user': order.user
+                'user': str(order.user),
+                'products': str(order.products)
             }
             for order in orders
         ]
         response_data = response.json()
-        self.assertEquals(response_data, expected_data)
+        self.assertEquals(response_data['orders'], expected_data)
 

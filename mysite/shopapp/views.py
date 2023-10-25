@@ -177,6 +177,7 @@ class ProductsDataExportsView(View):
                 'name': product.name,
                 'price': product.price,
                 'archieved': product.archieved,
+                'created_by': str(product.created_by)
 
             }
             for product in products
@@ -190,11 +191,11 @@ class OrdersDataExportView(View):
         orders = Order.objects.all()
         orders_data = [
             {
-
+                'pk': order.pk,
                 'delivery_adress': order.delivery_adress,
                 'promocode': order.promocode,
-                'products': order.products
-
+                'user': str(order.user),
+                'products': str(order.products)
             }
             for order in orders
         ]
