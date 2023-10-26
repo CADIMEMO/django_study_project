@@ -194,8 +194,8 @@ class OrdersDataExportView(View):
                 'pk': order.pk,
                 'delivery_adress': order.delivery_adress,
                 'promocode': order.promocode,
-                'user': str(order.user),
-                'products': str(order.products)
+                'user': order.user.pk,
+                'products': [product.pk for product in order.products.all()]
             }
             for order in orders
         ]
