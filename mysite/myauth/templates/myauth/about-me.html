@@ -8,8 +8,20 @@
 {% block body %}
     <h1>User Info</h1>
     {% if user.is_authenticated %}
+
         <h2>Details:</h2>
         <p>Username: {{user.username}}</p>
+        {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.profile.avatar.name }}" height="100" width="100">
+        {% else %}
+            <p>No user avatar</p>
+        {% endif %}
+        {% if user.profile %}
+            <a href="{% url 'myauth:change-info' pk=user.pk%}">Change profile</a>
+        {% else %}
+            <a>No user profile</a>
+            <a href="{% url 'myauth:create-info' pk=user.pk %}">Create profile</a>
+        {% endif %}
         <p>First name: {{user.first_name}}</p>
         <p>Last name: {{user.last_name}}</p>
         <p>E-mail: {{user.email}}</p>

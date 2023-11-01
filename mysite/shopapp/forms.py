@@ -10,12 +10,18 @@ class GroupForm(ModelForm):
         model = Group
         fields = ['name']
 
-class ProductForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = 'name', 'price', 'description', 'discount'
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = 'delivery_adress', 'promocode', 'products', 'user'
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'description', 'discount', 'preview']
+
+    images = forms.ImageField(
+        widget=forms.ClearableFileInput({'multiple': False})
+    )

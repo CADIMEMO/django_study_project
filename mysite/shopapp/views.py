@@ -4,7 +4,7 @@ from timeit import default_timer
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
-from .models import Product, Order
+from .models import Product, Order, ProductImage
 from .forms import ProductForm, OrderForm
 from django.views import View
 from django.views.generic import (TemplateView,
@@ -13,7 +13,7 @@ from django.views.generic import (TemplateView,
                                   CreateView,
                                   UpdateView,
                                   DeleteView)
-from .forms import GroupForm
+from .forms import GroupForm,ProductForm
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
@@ -47,23 +47,36 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
             kwargs={'pk': self.object.pk}
         )
 
+
+
+
 class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shopapp.change_product'
     model = Product
-    fields = 'name', 'price', 'description', 'discount'
+    # fields = 'name', 'price', 'description', 'discount', 'preview'
     template_name_suffix = '_update_form'
+
+    form_class = ProductForm
     def get_success_url(self):
         return reverse(
             'shopapp:products_details',
             kwargs={'pk': self.object.pk},
         )
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for image in form.files.getlist('images'):
+            ProductImage.object.create(
+                product=self.object,
+                image=image
+            )
+        return response
 
 
 class ProductCreateView(CreateView, LoginRequiredMixin, PermissionRequiredMixin):
 
     # permission_required = 'shopapp.add_product'
     model = Product
-    fields = 'name', 'price', 'description', 'discount'
+    fields = 'name', 'price', 'description', 'discount', 'preview'
 
     success_url = reverse_lazy('shopapp:products_list')
 
@@ -119,6 +132,7 @@ class ProductDelailsView(DetailView):
     template_name = 'shopapp/product-details.html'
     model = Product
     context_object_name = 'product'
+    queryset = Product.objects.prefetch_related('images')
     
 
 

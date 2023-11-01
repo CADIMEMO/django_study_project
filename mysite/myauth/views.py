@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 
 from django.contrib.auth.views import LogoutView, TemplateView
 from django.shortcuts import render, redirect, reverse
@@ -7,10 +9,48 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
+
+from .forms import ProfileForm
 from .models import Profile
 
 # Create your views here.
+
+class ProfileView(DetailView):
+    template_name = 'myauth/user_account.html'
+
+    queryset = Profile.objects.select_related('user')
+    context_object_name = 'profile'
+
+
+
+class UsersListView(ListView):
+
+    template_name = 'myauth/users.html'
+    model = User
+    queryset = User.objects.all()
+    context_object_name = 'users'
+
+
+class ProfileChangeView(UpdateView):
+
+    model = Profile
+    fields = 'bio', 'avatar'
+    template_name = 'myauth/about-me-update.html'
+    success_url = reverse_lazy('myauth:about-me')
+    context_object_name = 'profile'
+
+
+class ProfileCreateView(CreateView):
+
+    model = Profile
+    template_name = 'myauth/about-me-create.html'
+    fields = 'bio', 'avatar'
+    success_url = reverse_lazy('myauth:about-me')
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        response = super().form_valid(form)
+        return response
 
 
 class RegisterView(CreateView):
@@ -37,6 +77,7 @@ class RegisterView(CreateView):
 
 class AboutMeView(TemplateView):
     template_name = 'myauth/about-me.html'
+
 
 def login_view(request: HttpRequest):
 

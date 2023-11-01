@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.http import HttpRequest
-# Register your models here.
-from .models import Product, Order
+from .models import Product, Order, ProductImage
 from django.db.models import QuerySet
 from .admin_mixins import ExportAsCSVMixin
 
@@ -13,11 +12,24 @@ def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: 
 def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archieved=False)
 
+
+class ProductInline(admin.StackedInline):
+    model = ProductImage
+
+
+class OrderInline(admin.TabularInline):
+    model = Order.products.through
+
+
 class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
     actions = [
         mark_archived,
         'export_csv',
         mark_unarchived
+    ]
+    inlines = [
+        ProductInline,
+        OrderInline,
     ]
     list_display = 'pk', 'name', 'description_short', 'price', 'discount', 'archieved'
     list_display_links = 'pk', 'name'
@@ -35,19 +47,20 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
             'fields': ('archieved',),
             'classes': ('collapse',),
             'description': 'Extra options. Field "archieved" is for soft delete'
+        }),
+        ('Images', {
+            'fields': ('preview',),
         })
-
     ]
+
 
 admin.site.register(Product, ProductAdmin)
 
-class ProductInline(admin.TabularInline):
-    model = Order.products.through
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [
-        ProductInline,
+        OrderInline,
 
     ]
     list_display = 'delivery_adress', 'promocode', 'created_at'

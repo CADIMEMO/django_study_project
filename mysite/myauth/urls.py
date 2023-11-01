@@ -10,7 +10,11 @@ from .views import (set_cookie_view,
                     MyLogoutView,
                     AboutMeView,
                     RegisterView,
-                    FooBarView)
+                    FooBarView,
+                    ProfileCreateView,
+                    ProfileChangeView,
+                    UsersListView,
+                    ProfileView)
 
 app_name = 'myauth'
 
@@ -25,6 +29,10 @@ urlpatterns = [
     path('logout/', MyLogoutView.as_view(), name='logout'),
     path('about-me/', AboutMeView.as_view(), name='about-me'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('foo-bar', FooBarView.as_view(), name='foo-bar')
+    path('foo-bar', FooBarView.as_view(), name='foo-bar'),
+    path('about-me/<int:pk>/create', ProfileCreateView.as_view(), name='create-info'),
+    path('about-me/<int:pk>/change', ProfileChangeView.as_view(), name='change-info'),
+    path('users/', UsersListView.as_view(), name='users'),
+    path('users/profile_<int:pk>/', ProfileView.as_view(), name='profile'),
 
 ]

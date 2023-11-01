@@ -1,0 +1,24 @@
+{% extends "myauth/base.html" %}
+
+{% block title%}
+    Profile
+{% endblock title %}
+
+{% block body %}
+
+    <p>Username: {{profile.user}}</p>
+    <p>Bio: {{profile.bio}}</p>
+
+    {% if profile.avatar %}
+        <p>Avatar: <img src="{{ profile.avatar.url}}" alt="{{ profile.avatar.name }}" height="70" width="70"></p>
+    {% else %}
+        <p>No user avatar</p>
+    {% endif %}
+    <a href="{% url 'myauth:users'%}">return</a>
+    {% if perms.myauth.change_profile %}
+        <a href="{% url 'myauth:change-info' pk=profile.user.pk %}">change info</a>
+    {% elif user.pk == profile.user.pk %}
+        <a href="{% url 'myauth:change-info' pk=profile.user.pk %}">change info</a>
+    {% endif %}
+
+{% endblock body %}
