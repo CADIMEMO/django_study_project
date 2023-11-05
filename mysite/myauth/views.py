@@ -10,15 +10,31 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
-
+from django.utils.translation import gettext_lazy as _, ngettext
 from .forms import ProfileForm
 from .models import Profile
 
 # Create your views here.
 
-class ProfileView(DetailView):
-    template_name = 'myauth/user_account.html'
+class HelloView(View):
+    welcome_massage = _('welocome Hello world!')
+    def get(self, request: HttpRequest) -> HttpResponse:
+        items_str = request.GET.get('items') or 0
+        items = int(items_str)
+        products_line = ngettext(
+            'one product',
+            '{count} products',
+            items
+        )
+        products_line = products_line.format(count=items)
+        return HttpResponse(f'<h1>{self.welcome_massage}</h1>'
+                            f'\n<h2>{products_line}</h2>')
 
+
+
+class ProfileView(DetailView):
+
+    template_name = 'myauth/user_account.html'
     queryset = Profile.objects.select_related('user')
     context_object_name = 'profile'
 

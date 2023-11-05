@@ -19,6 +19,11 @@ shop index
         No products here
     {%endfor%}
     </ul>
+    <div>
+        <strong>
+            You have {{ items }} class{{ items|pluralize:'es' }}
+        </strong>
+    </div>
 </div>
 
 {%endblock%}

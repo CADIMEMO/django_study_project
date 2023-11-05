@@ -1,21 +1,22 @@
 {% extends 'shopapp/base.html' %}
+{% load i18n %}
 
 {% block title %}
-    product detail
+{% translate 'product detail' %}
 {% endblock %}
 
 {% block body %}
     <div>
-        <p>name {{object.name}}</P>
-        <p>description {{object.description}}</P>
-        <p>discount {{object.discount}}</P>
-        <p>archieved {{object.archieved}}</P>
-        <p>price {{object.price}}</P>
-        <p>created by {{object.created_by}}</p>
+        <p>{% translate 'name'%}: {{object.name}}</P>
+        <p>{% translate 'description' %}: {{object.description}}</P>
+        <p>{% translate 'discount' %}: {{object.discount}}</P>
+        <p>{% translate 'archieved' %}: {{object.archieved}}</P>
+        <p>{% translate 'price' %}: {{object.price}}</P>
+        <p>{% translate 'created by' %}: {{object.created_by}}</p>
         {% if product.preview %}
           <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
         {% endif %}
-        <h3>Images:</h3>
+        <h3>{% translate 'Images'%}:</h3>
         <div>
             {% for image in product.images.all %}
             <div>
@@ -25,23 +26,23 @@
                 </div>
             </div>
             {% empty %}
-                <div> No images uploaded yet </div>
+                <div> {% translate 'No images uploaded yet' %} </div>
             {% endfor %}
         </div>
     </div>
     {% if perms.shopapp.change_product %}
         <div>
-            <a href="{% url 'shopapp:product_update' pk=object.pk %}">update</a>
+            <a href="{% url 'shopapp:product_update' pk=object.pk %}">{%translate 'update'%}</a>
         </div>
     {% else %}
-        <p>no permission to update</p>
+        <p>{%translate 'no permission to update'%}</p>
     {% endif %}
     {% if perms.shopapp.delete_product%}
         <div>
-            <a href="{% url 'shopapp:product_delete' pk=object.pk %}">delete</a>
+            <a href="{% url 'shopapp:product_delete' pk=object.pk %}">{% translate 'delete' %}</a>
         </div>
     {% else %}
-        <p>no permission to delete</p>
+        <p>{% translate 'no permission to delete'%}</p>
     {% endif %}
 
 

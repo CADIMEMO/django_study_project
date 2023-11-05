@@ -15,6 +15,7 @@ from django.views.generic import (TemplateView,
                                   DeleteView)
 from .forms import GroupForm,ProductForm
 from django.urls import reverse_lazy, reverse
+from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
 
@@ -105,8 +106,9 @@ class ShopIndexView(View):
             ('Smartphone', 999),
         ]
         context = {
-            'time_running':default_timer(),
-            'products':products
+            'time_running': default_timer(),
+            'products': products,
+            'items': 5,
         }
         return render(request, 'shopapp/shop-index.html', context=context)
 
@@ -152,7 +154,8 @@ class ProductsListView(ListView):
 
 class OrderCreateView(CreateView):
     model = Order
-    fields = 'delivery_adress', 'promocode', 'products'
+    form_class = OrderForm
+    # fields = _('delivery_adress'), _('promocode'), _('products')
     template_name_suffix = '_make_an_order'
     success_url = reverse_lazy('shopapp:orders_list')
     def form_valid(self, form):

@@ -5,19 +5,7 @@
 {% endblock title %}
 
 {% block body %}
-    {% if user.pk == profile.user.pk %}
-        <h1> Update a profile for user {{user.name}}</h1>
-
-        <form method='post' enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button type='submit'>update</button>
-        </form>
-    {% elif perms.myauth.change_profile%}
-
+    {% if user.pk == profile.user.pk or perms.myauth.change_profile%}
         <h1> Update a profile for user {{user.name}}</h1>
 
         <form method='post' enctype="multipart/form-data">

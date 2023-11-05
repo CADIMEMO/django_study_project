@@ -15,9 +15,7 @@
         <p>No user avatar</p>
     {% endif %}
     <a href="{% url 'myauth:users'%}">return</a>
-    {% if perms.myauth.change_profile %}
-        <a href="{% url 'myauth:change-info' pk=profile.user.pk %}">change info</a>
-    {% elif user.pk == profile.user.pk %}
+    {% if perms.myauth.change_profile or user.pk == profile.user.pk %}
         <a href="{% url 'myauth:change-info' pk=profile.user.pk %}">change info</a>
     {% endif %}
 

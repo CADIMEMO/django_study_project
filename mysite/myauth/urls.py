@@ -14,7 +14,8 @@ from .views import (set_cookie_view,
                     ProfileCreateView,
                     ProfileChangeView,
                     UsersListView,
-                    ProfileView)
+                    ProfileView,
+                    HelloView)
 
 app_name = 'myauth'
 
@@ -34,5 +35,6 @@ urlpatterns = [
     path('about-me/<int:pk>/change', ProfileChangeView.as_view(), name='change-info'),
     path('users/', UsersListView.as_view(), name='users'),
     path('users/profile_<int:pk>/', ProfileView.as_view(), name='profile'),
+    path('hello/', HelloView.as_view(), name='hello'),
 
 ]

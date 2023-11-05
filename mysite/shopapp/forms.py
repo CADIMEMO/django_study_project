@@ -3,7 +3,7 @@ from django.core import validators
 from .models import Product, Order
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-
+from django.utils.translation import gettext_lazy as _
 
 class GroupForm(ModelForm):
     class Meta:
@@ -14,13 +14,13 @@ class GroupForm(ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = 'delivery_adress', 'promocode', 'products', 'user'
+        fields = _('delivery_adress'), _('promocode'), _('products')
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'description', 'discount', 'preview']
+        fields = [_('name'), _('price'), _('description'), _('discount'), _('preview')]
 
     images = forms.ImageField(
         widget=forms.ClearableFileInput({'multiple': False})

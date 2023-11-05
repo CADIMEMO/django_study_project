@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'reqapp.middlewares.setup_useragent_middleware',
+    'django.middleware.locale.LocaleMiddleware',
 
 
 ]
@@ -121,7 +122,16 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_L1ON = True
 
+LANGUAGES = [
+    ('en', _('English')),
+    ('ru', _('Russian')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale/'
+]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
