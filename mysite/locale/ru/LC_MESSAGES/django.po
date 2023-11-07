@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 17:39+0300\n"
+"POT-Creation-Date: 2023-11-07 16:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,27 +16,26 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: .\myauth\views.py:20
 msgid "welocome Hello world!"
-msgstr "Привет, мир!"
+msgstr ""
 
 #: .\myauth\views.py:25
 #, python-brace-format
 msgid "one product"
 msgid_plural "{count} products"
-msgstr[0] "{count} товар"
-msgstr[1] "{count} товара"
-msgstr[2] "{count} товаров"
+msgstr[0] ""
+msgstr[1] ""
 
-#: .\mysite\settings.py:128
+#: .\mysite\settings.py:129
 msgid "English"
 msgstr ""
 
-#: .\mysite\settings.py:129
+#: .\mysite\settings.py:130
 msgid "Russian"
 msgstr ""
 
@@ -49,89 +48,89 @@ msgid "promocode"
 msgstr "промокод"
 
 #: .\shopapp\forms.py:17
-#, fuzzy
-#| msgid "products list"
 msgid "products"
-msgstr "Список товаров:"
+msgstr "товары"
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:10
+#: .\shopapp\forms.py:23
 msgid "name"
-msgstr "название"
+msgstr "имя"
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:14
-#, fuzzy
-#| msgid "Price"
+#: .\shopapp\forms.py:23
 msgid "price"
-msgstr "Цена"
+msgstr "цена"
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:11
+#: .\shopapp\forms.py:23
 msgid "description"
-msgstr "описание товара"
+msgstr "описание"
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:12
-#, fuzzy
-#| msgid "Discount"
+#: .\shopapp\forms.py:23
 msgid "discount"
-msgstr "Скидка"
+msgstr "скидк"
 
 #: .\shopapp\forms.py:23
 msgid "preview"
 msgstr "превью"
 
 #: .\shopapp\models.py:19
-#, fuzzy
-#| msgid "products list"
 msgid "Product"
-msgstr "Список товаров:"
+msgstr "Товар"
 
 #: .\shopapp\models.py:20 .\shopapp\templates\shopapp\products-list.html:10
-#, fuzzy
-#| msgid "products list"
 msgid "Products"
-msgstr "Список товаров:"
+msgstr "Товары"
 
 #: .\shopapp\models.py:51
-#, fuzzy
-#| msgid "order"
 msgid "Order"
-msgstr "заказать"
+msgstr "Заказ"
 
 #: .\shopapp\models.py:52
-#, fuzzy
-#| msgid "order"
 msgid "Orders"
-msgstr "заказать"
+msgstr "Заказы"
 
 #: .\shopapp\templates\shopapp\order_make_an_order.html:6
-#, fuzzy
-#| msgid "Make an order"
 msgid "Create an Order"
-msgstr "Сделать заказ"
+msgstr "Создать заказ"
 
 #: .\shopapp\templates\shopapp\order_make_an_order.html:10
 msgid "Make an order"
-msgstr "Сделать заказ"
+msgstr "Создание заказ"
 
 #: .\shopapp\templates\shopapp\order_make_an_order.html:18
 msgid "order"
-msgstr "заказать"
+msgstr "заказ"
 
 #: .\shopapp\templates\shopapp\order_make_an_order.html:23
 msgid "return to orders"
 msgstr "вернуться к списку заказов"
 
 #: .\shopapp\templates\shopapp\product-details.html:5
-#, fuzzy
-#| msgid "products list"
 msgid "product detail"
-msgstr "Список товаров"
+msgstr "детали товара"
+
+#: .\shopapp\templates\shopapp\product-details.html:10
+msgid "Name"
+msgstr "Название"
+
+#: .\shopapp\templates\shopapp\product-details.html:11
+msgid "Description"
+msgstr "Описание"
+
+#: .\shopapp\templates\shopapp\product-details.html:12
+#: .\shopapp\templates\shopapp\products-list.html:26
+msgid "Discount"
+msgstr "Скидка"
 
 #: .\shopapp\templates\shopapp\product-details.html:13
-msgid "archieved"
-msgstr "Архевировано"
+msgid "Archived"
+msgstr "Архивировано"
+
+#: .\shopapp\templates\shopapp\product-details.html:14
+#: .\shopapp\templates\shopapp\products-list.html:24
+msgid "Price"
+msgstr "Цена"
 
 #: .\shopapp\templates\shopapp\product-details.html:15
-msgid "created by"
+msgid "Created by"
 msgstr "Создано"
 
 #: .\shopapp\templates\shopapp\product-details.html:19
@@ -140,27 +139,27 @@ msgstr "Изображения"
 
 #: .\shopapp\templates\shopapp\product-details.html:29
 msgid "No images uploaded yet"
-msgstr "Нет подгруженых изображений"
+msgstr "нет подгруженных изображений"
 
 #: .\shopapp\templates\shopapp\product-details.html:35
 msgid "update"
-msgstr "Изменить"
+msgstr "обновить"
 
 #: .\shopapp\templates\shopapp\product-details.html:38
 msgid "no permission to update"
-msgstr "Нет разрешения на изменение товара"
+msgstr "нет разрешения на обновление заказа"
 
 #: .\shopapp\templates\shopapp\product-details.html:42
 msgid "delete"
-msgstr "Удалить"
+msgstr "удалить"
 
 #: .\shopapp\templates\shopapp\product-details.html:45
 msgid "no permission to delete"
-msgstr "Нет разрешения на удаление товара"
+msgstr "нет разрешения на удаление"
 
 #: .\shopapp\templates\shopapp\products-list.html:6
 msgid "products list"
-msgstr "Cписок товаров"
+msgstr "список товаров"
 
 #: .\shopapp\templates\shopapp\products-list.html:13
 #, python-format
@@ -172,48 +171,25 @@ msgid_plural ""
 "\n"
 "        There are %(products_count)s products.\n"
 "      "
-msgstr[0] ""
-"\n"
-"        Доступен %(products_count)s товар.\n"
-"      "
-msgstr[1] ""
-"\n"
-"        Доступно %(products_count)s товара.\n"
-"      "
-msgstr[2] ""
-"\n"
-"        Доступно %(products_count)s товаров.\n"
-"      "
+msgstr[0] "Товара"
+msgstr[1] "Товаров"
 
 #: .\shopapp\templates\shopapp\products-list.html:22
 msgctxt "product name"
 msgid "Name"
 msgstr "Название"
 
-#: .\shopapp\templates\shopapp\products-list.html:24
-msgid "Price"
-msgstr "Цена"
-
 #: .\shopapp\templates\shopapp\products-list.html:25
-#, fuzzy
-#| msgid "Discount"
 msgid "no discount"
-msgstr "Нет скидки"
-
-#: .\shopapp\templates\shopapp\products-list.html:26
-msgid "Discount"
-msgstr "Скидка"
+msgstr "нет скидки"
 
 #: .\shopapp\templates\shopapp\products-list.html:30
 msgid "test"
 msgstr "тест"
 
 #: .\shopapp\templates\shopapp\products-list.html:36
-#, fuzzy
-#| msgid "one product"
-#| msgid_plural "{count} products"
 msgid "Create a new product"
-msgstr "Создать новый товар"
+msgstr "Создать новый продукт"
 
 #: .\shopapp\templates\shopapp\products-list.html:41
 #, python-format
@@ -226,17 +202,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"    <h3>Товаров нет</h3>\n"
+"    <h3>Нет продуктов</h3>\n"
 "      <a href=\"%(create_product_url)s\">\n"
-"    Создать новый товар\n"
+"    Создать продукт\n"
 "  </a>\n"
 "    "
-
-#~ msgid "user"
-#~ msgstr "пользователь:"
-
-#, fuzzy
-#~| msgid "one product"
-#~| msgid_plural "{count} products"
-#~ msgid "No products"
-#~ msgstr "Нет товаров"

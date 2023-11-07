@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 17:39+0300\n"
+"POT-Creation-Date: 2023-11-07 16:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,21 +51,21 @@ msgstr ""
 msgid "products"
 msgstr "Products"
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:10
+#: .\shopapp\forms.py:23
 msgid "name"
 msgstr ""
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:14
+#: .\shopapp\forms.py:23
 #, fuzzy
 #| msgid "Price"
 msgid "price"
 msgstr "Price"
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:11
+#: .\shopapp\forms.py:23
 msgid "description"
 msgstr ""
 
-#: .\shopapp\forms.py:23 .\shopapp\templates\shopapp\product-details.html:12
+#: .\shopapp\forms.py:23
 #, fuzzy
 #| msgid "Discount"
 msgid "discount"
@@ -119,35 +119,40 @@ msgstr ""
 msgid "product detail"
 msgstr "products list"
 
-#: .\shopapp\templates\shopapp\product-details.html:13
-msgid "archieved"
+#: .\shopapp\templates\shopapp\product-details.html:10
+#, python-format
+msgid ""
+"\n"
+"            <p>Name: %(object.name)s</P>\n"
+"            <p>Description: %(object.description)s</P>\n"
+"            <p>Discount: %(object.discount)s</P>\n"
+"            <p>Archived: %(object.archieved)s</P>\n"
+"            <p>Price: %(object.price)s</P>\n"
+"            <p>Created by: %(object.created_by)s</p>\n"
+"        "
 msgstr ""
 
-#: .\shopapp\templates\shopapp\product-details.html:15
-msgid "created by"
-msgstr ""
-
-#: .\shopapp\templates\shopapp\product-details.html:19
+#: .\shopapp\templates\shopapp\product-details.html:21
 msgid "Images"
 msgstr ""
 
-#: .\shopapp\templates\shopapp\product-details.html:29
+#: .\shopapp\templates\shopapp\product-details.html:31
 msgid "No images uploaded yet"
 msgstr ""
 
-#: .\shopapp\templates\shopapp\product-details.html:35
+#: .\shopapp\templates\shopapp\product-details.html:37
 msgid "update"
 msgstr ""
 
-#: .\shopapp\templates\shopapp\product-details.html:38
+#: .\shopapp\templates\shopapp\product-details.html:40
 msgid "no permission to update"
 msgstr ""
 
-#: .\shopapp\templates\shopapp\product-details.html:42
+#: .\shopapp\templates\shopapp\product-details.html:44
 msgid "delete"
 msgstr ""
 
-#: .\shopapp\templates\shopapp\product-details.html:45
+#: .\shopapp\templates\shopapp\product-details.html:47
 msgid "no permission to delete"
 msgstr ""
 
@@ -208,6 +213,12 @@ msgid ""
 "  </a>\n"
 "    "
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "product name"
+#~| msgid "Name"
+#~ msgid "Name"
+#~ msgstr "Name"
 
 #, fuzzy
 #~| msgid "one product"

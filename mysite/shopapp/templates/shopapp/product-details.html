@@ -7,12 +7,12 @@
 
 {% block body %}
     <div>
-        <p>{% translate 'name'%}: {{object.name}}</P>
-        <p>{% translate 'description' %}: {{object.description}}</P>
-        <p>{% translate 'discount' %}: {{object.discount}}</P>
-        <p>{% translate 'archieved' %}: {{object.archieved}}</P>
-        <p>{% translate 'price' %}: {{object.price}}</P>
-        <p>{% translate 'created by' %}: {{object.created_by}}</p>
+        <p>{% translate 'Name'%}: {{object.name}}</P>
+        <p>{% translate 'Description' %}: {{object.description}}</P>
+        <p>{% translate 'Discount' %}: {{object.discount}}</P>
+        <p>{% translate 'Archived' %}: {{object.archieved}}</P>
+        <p>{% translate 'Price' %}: {{object.price}}</P>
+        <p>{% translate 'Created by' %}: {{object.created_by}}</p>
         {% if product.preview %}
           <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
         {% endif %}
