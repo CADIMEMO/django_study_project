@@ -15,9 +15,63 @@ from django.views.generic import (TemplateView,
                                   DeleteView)
 from .forms import GroupForm,ProductForm
 from django.urls import reverse_lazy, reverse
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .serializers import ProductSerializer, OrderSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+        OrderingFilter,
+
+    ]
+    search_fields = ['name', 'description']
+    filterset_fields = [
+        'delivery_adress',
+        'user',
+        'promocode',
+        'products'
+    ]
+    ordering_fields = [
+        'pk',
+        'user',
+        'promocode',
+
+    ]
+
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [
+        SearchFilter,
+        DjangoFilterBackend,
+        OrderingFilter,
+        OrderingFilter,
+
+    ]
+    search_fields = ['name', 'description']
+    filterset_fields = [
+        'name',
+        'description',
+        'price',
+        'discount'
+    ]
+    ordering_fields = [
+        'pk',
+        'price',
+        'name',
+    ]
 
 
 class ProductDeleteView(PermissionRequiredMixin, DeleteView):

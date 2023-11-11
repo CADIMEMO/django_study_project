@@ -23,8 +23,8 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('req/', include('reqapp.urls')),
+    path('api/', include('myapiapp.urls')),
 
 
 ]
