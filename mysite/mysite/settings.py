@@ -41,10 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'drf_spectacular',
     'shopapp.apps.ShopappConfig',
     'reqapp.apps.ReqappConfig',
     'myauth.apps.MyauthConfig',
     'myapiapp.apps.MyapiappConfig',
+    'django.contrib.admindocs'
+
 
 
 ]
@@ -59,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'reqapp.middlewares.setup_useragent_middleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
 
 
 
@@ -158,5 +162,14 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'My site project API',
+    'DESCRIPTION': 'My site with shop app and custom authentication',
+    'VERSION': '0.3.9',
+    'SERVE_INCLUDE_SCHEMA': False
+
 }

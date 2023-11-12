@@ -1,3 +1,9 @@
+"""
+В этом модуле лежат различные django view классы и функции.
+
+Товары, заказы и все такое и так далее.
+"""
+
 from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
 from timeit import default_timer
@@ -19,6 +25,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .serializers import ProductSerializer, OrderSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
@@ -49,8 +56,14 @@ class OrderViewSet(ModelViewSet):
 
     ]
 
-
+@extend_schema(description='Product views CRUD')
 class ProductViewSet(ModelViewSet):
+
+    """
+    Полный набор представлений для действий над Product
+    Полный CRUD для сущностей товара.
+    """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
@@ -72,6 +85,16 @@ class ProductViewSet(ModelViewSet):
         'price',
         'name',
     ]
+    @extend_schema(
+        summary='Get one product by id',
+        responses={
+            200: ProductSerializer,
+            404: OpenApiResponse(description='Empty response, **product** by **ID** not found'),
+        }
+    )
+    def retrieve(self, *args, **kwargs):
+        return super().retrieve(*args, **kwargs)
+
 
 
 class ProductDeleteView(PermissionRequiredMixin, DeleteView):
