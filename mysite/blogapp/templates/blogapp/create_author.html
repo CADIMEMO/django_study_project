@@ -1,0 +1,20 @@
+{% extends 'blogapp/base.html' %}
+
+{% block title %}
+    Create Author
+{% endblock title %}
+
+{%block body%}
+    <h1>Create an Author</h1>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Create Author</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        <a href="{% url 'blogapp:article_list'%}">Return to articles</a>
+    </div>
+{%endblock body%}

@@ -1,0 +1,20 @@
+{% extends 'blogapp/base.html' %}
+
+{% block title %}
+    Create a new Category
+{% endblock title %}
+
+{%block body%}
+    <h1>Create a Category:</h1>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Create new category</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        <a href="{% url 'blogapp:article_list'%}">Return to articles</a>
+    </div>
+{%endblock body%}

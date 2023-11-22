@@ -154,8 +154,8 @@ class ProductCreateView(CreateView, LoginRequiredMixin, PermissionRequiredMixin)
 
     # permission_required = 'shopapp.add_product'
     model = Product
-    fields = 'name', 'price', 'description', 'discount', 'preview'
-
+    # fields = 'name', 'price', 'description', 'discount', 'preview'
+    form_class = ProductForm
     success_url = reverse_lazy('shopapp:products_list')
 
 

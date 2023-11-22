@@ -1,0 +1,25 @@
+{% extends 'blogapp/base.html' %}
+
+{% block title %}
+    Create an Article
+{% endblock title %}
+
+{%block body%}
+    <h1>Create an Article:</h1>
+    <div>
+        <a href="{% url 'blogapp:create_author'%}">Create new author</a>
+        <a href="{% url 'blogapp:create_tag'%}">Create new tag</a>
+        <a href="{% url 'blogapp:create_category'%}">Create new category</a>
+    </div>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Publish an article</button>
+        </form>
+    </div>
+    <br>
+    <div>
+        <a href="{% url 'blogapp:article_list'%}">Return to articles</a>
+    </div>
+{%endblock body%}
