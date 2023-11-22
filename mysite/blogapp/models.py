@@ -6,14 +6,20 @@ from django.db.models import Model
 class Author(Model):
     name = models.CharField(max_length=100, null=False)
     bio = models.TextField(blank=True)
+    def __str__(self):
+        return self.name
 
 
 class Category(Model):
     name = models.CharField(max_length=30, null=False)
+    def __str__(self):
+        return self.name
 
 
 class Tag(Model):
     name = models.CharField(max_length=20, null=False)
+    def __str__(self):
+        return self.name
 
 
 class Article(Model):

@@ -13,7 +13,7 @@ class BaseView(TemplateView):
 
 class ArticleList(ListView):
     model = Article
-    queryset = Article.objects.all()
+    queryset = Article.objects.select_related('author').select_related('category').prefetch_related('tags')
     context_object_name = 'articles'
     template_name = 'blogapp/article_list.html'
 
