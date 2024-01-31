@@ -3,7 +3,7 @@
 
 Товары, заказы и все такое и так далее.
 """
-
+import logging
 from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
 from timeit import default_timer
@@ -30,7 +30,7 @@ from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
 
-
+logger = logging.getLogger(__name__)
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -187,6 +187,8 @@ class ShopIndexView(View):
             'products': products,
             'items': 5,
         }
+        logger.debug('Products for shop index: %s', products)
+        logger.info('Rendering shop index')
         return render(request, 'shopapp/shop-index.html', context=context)
 
 
@@ -276,6 +278,9 @@ class ProductsDataExportsView(View):
             }
             for product in products
         ]
+        elem = products_data[0]
+        name = elem['name']
+        print('name:', name)
         return JsonResponse({'products': products_data})
 
 

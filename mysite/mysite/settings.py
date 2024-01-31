@@ -14,6 +14,19 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://cdc365a1da9966b6178acab3b6a7c378@o4506666932830208.ingest.sentry.io/4506666937024512",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,8 +40,22 @@ SECRET_KEY = 'django-insecure-*(7dcnntcgs#21%9tdnt*akwzpksq!1)xwuxytp*jsm#6=r6k4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        '0.0.0.0',
+        '127.0.0.1',
+        'localhost'
+                 ]
+INTERNAL_IPS = [
+    '127.0.0.1'
+]
 
+if DEBUG:
+    import socket
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS.append('10.0.2.2')
+    INTERNAL_IPS.extend(
+        [ip[: ip.rfind('.')] + '.1' for ip in ips]
+    )
 
 # Application definition
 
@@ -39,9 +66,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'debug_toolbar',
     'rest_framework',
     'django_filters',
     'drf_spectacular',
+
     'shopapp.apps.ShopappConfig',
     'reqapp.apps.ReqappConfig',
     'myauth.apps.MyauthConfig',
@@ -65,6 +95,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'reqapp.middlewares.setup_useragent_middleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
 
@@ -133,8 +164,8 @@ USE_TZ = True
 USE_L1ON = True
 
 LANGUAGES = [
-    ('en', _('English')),
-    ('ru', _('Russian')),
+    ('en', 'English'),
+    ('ru', 'Russian'),
 ]
 
 LOCALE_PATHS = [
@@ -155,6 +186,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = reverse_lazy('myauth:about-me')
 LOGIN_URL = reverse_lazy('myauth:login')
+LOGFILE_NAME = BASE_DIR / 'log.txt'
+LOGFILE_SIZE = 400
+LOGFILE_COUNT = 3
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'logfile': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGFILE_NAME,
+            'maxBytes': LOGFILE_SIZE,
+            'backupCount': LOGFILE_COUNT,
+            'formatter': 'verbose'
+        },
+    },
+    'root': {
+        'handlers': ['console', 'logfile'],
+        'level': 'DEBUG',
+    }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -194,3 +255,4 @@ LOGGING = {
         }
     }
 }
+
