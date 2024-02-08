@@ -72,12 +72,14 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
 
+
     'shopapp.apps.ShopappConfig',
     'reqapp.apps.ReqappConfig',
     'myauth.apps.MyauthConfig',
     'myapiapp.apps.MyapiappConfig',
     'blogapp.apps.BlogappConfig',
     'django.contrib.admindocs',
+    'django.contrib.sitemaps',
 
 
 

@@ -1,3 +1,4 @@
+from django.contrib.syndication.views import Feed
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView, ListView, CreateView, DetailView
@@ -45,3 +46,29 @@ class CreateCategory(CreateView):
     template_name = 'blogapp/create_category.html'
     fields = ['name']
     success_url = reverse_lazy('blogapp:article_list')
+
+
+class LatestArticleFeed(Feed):
+    title = 'Blog articles (latest)'
+    description = 'Updates on changes and additions blog articles'
+    link = reverse_lazy('blogapp:article_list')
+
+    def items(self):
+        return (
+            Article.objects
+            .order_by('-pub_date')[:1]
+        )
+
+    def item_title(self, item: Article):
+        return item.title
+
+    def item_description(self, item: Article):
+        return item.content[:200]
+
+    # def item_link(self, item: Article):
+    #     return reverse('blogapp:article_details', kwargs={'pk': item.pk})
+
+
+class ArticleDetailView(DetailView):
+    template_name = 'blogapp/article.html'
+    model = Article

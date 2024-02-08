@@ -4,12 +4,16 @@
 Товары, заказы и все такое и так далее.
 """
 import logging
+
+from django.contrib.syndication.views import Feed
 from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
 from timeit import default_timer
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
+from rest_framework.response import Response
+
 from .models import Product, Order, ProductImage
 from .forms import ProductForm, OrderForm
 from django.views import View
@@ -20,12 +24,17 @@ from django.views.generic import (TemplateView,
                                   UpdateView,
                                   DeleteView)
 from .forms import GroupForm,ProductForm
+from .common import save_csv_products
 from django.urls import reverse_lazy, reverse
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.request import Request
+from rest_framework.parsers import MultiPartParser
 from .serializers import ProductSerializer, OrderSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+from rest_framework.decorators import action
+from csv import DictWriter
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 # Create your views here.
@@ -94,8 +103,39 @@ class ProductViewSet(ModelViewSet):
     )
     def retrieve(self, *args, **kwargs):
         return super().retrieve(*args, **kwargs)
-
-
+    @action(methods=['get'], detail=False)
+    def download_csv(self, request: Request):
+        response = HttpResponse(content_type='text/csv')
+        filename = 'products-export.csv'
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+        queryset = self.filter_queryset(self.get_queryset())
+        fields = [
+            'name',
+            'description',
+            'price',
+            'discount'
+        ]
+        queryset = queryset.only(*fields)
+        writer = DictWriter(response, fieldnames=fields)
+        writer.writeheader()
+        for product in queryset:
+            writer.writerow({
+                field: getattr(product, field)
+                for field in fields
+            })
+        return response
+    @action(
+        detail=False,
+        methods=['post'],
+        parser_classes=[MultiPartParser]
+    )
+    def upload_csv(self, request: Request):
+        products = save_csv_products(
+            request.FILES['file'].file,
+            encoding=request.encoding,
+        )
+        serializer = self.get_serializer(products, many=True)
+        return Response(serializer.data)
 
 class ProductDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'shopapp.delete_product'
@@ -299,3 +339,20 @@ class OrdersDataExportView(View):
             for order in orders
         ]
         return JsonResponse({'orders': orders_data})
+
+class LatestProductsFeed(Feed):
+
+    title = 'Products'
+    description = ''
+    link = reverse_lazy('shopapp:products_list')
+
+    def items(self):
+        return (
+            Product.objects
+            .all()
+        )
+    def item_name(self, item: Product):
+        return item.name
+
+    def item_description(self, item: Product):
+        return item.description[:200]

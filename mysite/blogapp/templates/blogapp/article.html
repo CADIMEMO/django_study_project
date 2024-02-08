@@ -1,0 +1,19 @@
+{% block title %}
+    Article {{article.pk}}
+{% endblock title %}
+
+{%block body%}
+    <div>
+        <p>Tags:
+            {% for tag in article.tags.all %}
+                {{tag.name}}
+            {% endfor %}
+        </p>
+        <p>Category: {{article.category.name}}</p>
+        <p>Author: {{article.author.name}}</p>
+        <p>Title: {{article.title}}</p>
+        <p>{{article.content|linebreaks}}</p>
+        <p>Published at: {{article.pub_date}}</p>
+        <a href="{% url 'blogapp:article_list'%}">Return</a>
+    </div>
+{%endblock body%}

@@ -18,9 +18,9 @@
                     {{tag.name}}
                 {% endfor %}
             </p>
+            <a href="{% url 'blogapp:article_details' pk=article.pk%}"><p>Title: {{article.title}}</p></a>
             <p>Category: {{article.category.name}}</p>
             <p>Author: {{article.author.name}}</p>
-            <p>Title: {{article.title}}</p>
             <p>{{article.content|linebreaks}}</p>
             <p>Published at: {{article.pub_date}}</p>
         </div>
