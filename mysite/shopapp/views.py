@@ -4,7 +4,7 @@
 Товары, заказы и все такое и так далее.
 """
 import logging
-
+import csv
 from django.contrib.syndication.views import Feed
 from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
@@ -339,6 +339,19 @@ class OrdersDataExportView(View):
             for order in orders
         ]
         return JsonResponse({'orders': orders_data})
+
+def export_orders_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="orders.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['delivery_adress', 'promocode', 'created_at', 'user', 'products'])
+
+    users = Order.objects.all().values_list('delivery_adress', 'promocode', 'created_at', 'user', 'products')
+    for user in users:
+        writer.writerow(user)
+
+    return response
 
 class LatestProductsFeed(Feed):
 

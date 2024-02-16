@@ -16,7 +16,9 @@ from .views import (ShopIndexView,
                     ProductsDataExportsView,
                     OrdersDataExportView,
                     ProductViewSet,
-                    OrderViewSet, LatestProductsFeed)
+                    OrderViewSet,
+                    LatestProductsFeed,
+                    export_orders_csv)
 
 app_name = 'shopapp'
 
@@ -44,6 +46,8 @@ urlpatterns = [
     path('orders/<int:pk>', OrderDetailView.as_view(), name='order_details'),
     path('orders/<int:pk>/delete', OrderDeleteView.as_view(), name='order_delete'),
     path('orders/<int:pk>/update', OrderUpdateView.as_view(), name='order_update'),
+
+    path('export', export_orders_csv, name='export_orders_csv')
 
 
 
