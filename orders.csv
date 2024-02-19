@@ -1,2 +1,2 @@
-delivery_adress, promocode, created_at, user, products
-"Ulica NewNewOldNew dom 212", "Cake", "2024-02-16T09:00:14.935Z", 1, "3, 1, 2"
+delivery_adress,promocode,created_at,user_id,products
+Ulica 1111, "Cake123", 2024-02-19T09:00:14.935Z, 1, 1
