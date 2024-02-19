@@ -103,7 +103,7 @@ class OrderAdmin(admin.ModelAdmin, ExportAsCSVMixin):
         OrderInline,
 
     ]
-    list_display = 'delivery_adress', 'promocode', 'created_at'
+    list_display = 'delivery_adress', 'promocode', 'created_at', 'user'
     def get_queryset(self, request):
         return Order.objects.select_related('user')
 
@@ -118,7 +118,9 @@ class OrderAdmin(admin.ModelAdmin, ExportAsCSVMixin):
                 'form': form,
             }
             return render(request, 'admin/csv_form.html', context=context)
+
         form = CSVImportForm(request.POST, request.FILES)
+
         if not form.is_valid():
             context = {
                 'form': form

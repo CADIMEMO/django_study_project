@@ -27,9 +27,21 @@ def save_csv_orders(file, encoding):
     )
     reader = DictReader(csv_file)
 
-    orders = [
-        Order(**row)
-        for row in reader
-    ]
-    Order.objects.bulk_create(orders)
-    return orders
+    # orders = [
+    #     Order(**row)
+    #     for row in reader
+    # ]
+    # Order.objects.bulk_create(orders)
+    # return orders
+
+    for row in reader:
+        products = row.pop('products')
+        order = Order(**row)
+        order.save()
+        products_ids = []
+        for sym in products:
+            if sym in '1234567890':
+                products_ids.append(int(sym))
+        order.products.set(products_ids)
+
+

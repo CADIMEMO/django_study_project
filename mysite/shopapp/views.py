@@ -334,7 +334,8 @@ class OrdersDataExportView(View):
                 'delivery_adress': order.delivery_adress,
                 'promocode': order.promocode,
                 'user': order.user.pk,
-                'products': [product.pk for product in order.products.all()]
+                'created_at': order.created_at,
+                'products': [product.name for product in order.products.all()]
             }
             for order in orders
         ]
@@ -347,9 +348,9 @@ def export_orders_csv(request):
     writer = csv.writer(response)
     writer.writerow(['delivery_adress', 'promocode', 'created_at', 'user', 'products'])
 
-    users = Order.objects.all().values_list('delivery_adress', 'promocode', 'created_at', 'user', 'products')
-    for user in users:
-        writer.writerow(user)
+    orders = Order.objects.all().values_list('delivery_adress', 'promocode', 'created_at', 'user', 'products')
+    for order in orders:
+        writer.writerow(order)
 
     return response
 
