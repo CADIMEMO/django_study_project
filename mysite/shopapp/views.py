@@ -5,15 +5,17 @@
 """
 import logging
 import csv
+from django.utils.decorators import method_decorator
 from django.contrib.syndication.views import Feed
 from django.shortcuts import (render, redirect,
                               reverse, get_object_or_404)
 from timeit import default_timer
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
+from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
-
+from django.core.cache import cache
 from .models import Product, Order, ProductImage
 from .forms import ProductForm, OrderForm
 from django.views import View
@@ -94,6 +96,9 @@ class ProductViewSet(ModelViewSet):
         'price',
         'name',
     ]
+    # @method_decorator(cache_page(60))
+    def list(self, *args, **kwargs):
+        return super().list(*args, **kwargs)
     @extend_schema(
         summary='Get one product by id',
         responses={
@@ -227,8 +232,10 @@ class ShopIndexView(View):
             'products': products,
             'items': 5,
         }
+
         logger.debug('Products for shop index: %s', products)
         logger.info('Rendering shop index')
+        print('shop index context', context)
         return render(request, 'shopapp/shop-index.html', context=context)
 
 
@@ -250,11 +257,11 @@ class GroupsListView(View):
         return redirect(request.path)
 
 class ProductDelailsView(DetailView):
+
     template_name = 'shopapp/product-details.html'
     model = Product
     context_object_name = 'product'
     queryset = Product.objects.prefetch_related('images')
-    
 
 
 class ProductsListView(ListView):
@@ -285,6 +292,20 @@ class OrderCreateView(CreateView):
 
 
 
+class UserOrdersDetailView(LoginRequiredMixin, ListView):
+
+    template_name = 'shopapp/user_orders_list.html'
+
+    def get_queryset(self):
+
+        self.owner = User.objects.get(pk=self.kwargs['pk'])
+        return Order.objects.filter(user=self.owner)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = User.objects.get(pk=self.kwargs['pk']).username
+        return context
+
 
 class OrdersListView(LoginRequiredMixin, ListView):
 
@@ -306,21 +327,26 @@ class OrderDetailView(PermissionRequiredMixin, DetailView):
 class ProductsDataExportsView(View):
 
     def get(self, request: HttpRequest) -> JsonResponse:
-        products = Product.objects.order_by('pk').all()
-        products_data = [
-            {
-                'pk': product.pk,
-                'name': product.name,
-                'price': product.price,
-                'archieved': product.archieved,
-                'created_by': str(product.created_by)
+        cache_key = 'products_data_export'
 
-            }
-            for product in products
-        ]
-        elem = products_data[0]
-        name = elem['name']
-        print('name:', name)
+        products_data = cache.get(cache_key)
+        products = Product.objects.order_by('pk').all()
+        if products_data is None:
+            products_data = [
+                {
+                    'pk': product.pk,
+                    'name': product.name,
+                    'price': product.price,
+                    'archieved': product.archieved,
+                    'created_by': str(product.created_by)
+
+                }
+                for product in products
+            ]
+            elem = products_data[0]
+            name = elem['name']
+            print('name:', name)
+            cache.set(cache_key, products_data, 300)
         return JsonResponse({'products': products_data})
 
 
@@ -370,3 +396,37 @@ class LatestProductsFeed(Feed):
 
     def item_description(self, item: Product):
         return item.description[:200]
+
+class UserOrdersDataExportView(View):
+
+
+    def get(self, request: HttpRequest, **kwargs) -> JsonResponse:
+
+        cache_key = kwargs['pk']
+
+        orders_data = cache.get(cache_key)
+
+        try:
+            self.owner = User.objects.get(pk=kwargs['pk'])
+        except:
+            return HttpResponseNotFound('User matching query does not exist. 404')
+
+        orders = Order.objects.filter(user=self.owner)
+
+        if orders_data is None:
+            orders_data = [
+                {
+                    'pk': order.pk,
+                    'delivery_adress': order.delivery_adress,
+                    'promocode': order.promocode,
+                    'user': order.user.pk,
+                    'created_at': order.created_at,
+                    'products': [product.name for product in order.products.all()]
+
+                }
+                for order in orders
+            ]
+
+            cache.set(cache_key, orders_data, 300)
+
+        return JsonResponse({'products': orders_data})

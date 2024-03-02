@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from shopapp.models import Order
+
+
 # Create your models here.
 
 def avatar_images_directory_path(instance: 'Profile', filename=str):
@@ -15,6 +18,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     agreement_accepted = models.BooleanField(default=False)
     avatar = models.ImageField(null=True, upload_to=avatar_images_directory_path)
+
 
 
 

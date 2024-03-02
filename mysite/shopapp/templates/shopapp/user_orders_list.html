@@ -1,0 +1,31 @@
+{% load cache %}
+{%block title%}
+Orders list
+{%endblock%}
+
+{%block body%}
+        {% if not object_list %}
+            <p>No Orders</p>
+        {% endif %}
+        {% if object_list %}
+        <div>
+            <p>User {{ user }} have some orders:</p>
+        </div>
+        {% endif %}
+        {% cache 120 {{order.user.pk}} %}
+            {% for order in object_list %}
+            <div>
+
+                    <p>Order #{{order.id}}</p>
+                    <p>Ordered by {{order.user}}</p>
+                    <p>promocode {{order.promocode}}</p>
+                    <p>adress {{order.delivery_adress}}</p>
+                    <p>created at {{order.created_at}}</p>
+                        {% for product in order.products.all %}
+                            <li>{{product.name}}</li>
+                        {% endfor %}
+
+            </div>
+            {% endfor %}
+        {% endcache %}
+{% endblock %}

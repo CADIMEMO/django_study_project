@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-
+from random import random
 from django.contrib.auth.views import LogoutView, TemplateView
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
@@ -13,6 +13,7 @@ from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.utils.translation import gettext_lazy as _, ngettext
 from .forms import ProfileForm
 from .models import Profile
+from django.views.decorators.cache import cache_page
 
 # Create your views here.
 
@@ -120,10 +121,10 @@ def set_cookie_view(request: HttpRequest):
     response.set_cookie('fizz', 'buzz', max_age=3600)
     return response
 
-
+@cache_page(60 * 2)
 def get_cookie_view(request: HttpRequest):
     value = request.COOKIES.get('fizz', 'default value')
-    return HttpResponse(f'Cookie value = {value!r}')
+    return HttpResponse(f'Cookie value = {value!r} + {random()}')
 
 
 @permission_required('myauth.view_profile', raise_exception=True)
