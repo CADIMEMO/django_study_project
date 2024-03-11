@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import logging.config
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
-
+from os import getenv
 import sentry_sdk
 
 sentry_sdk.init(
@@ -35,16 +35,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*(7dcnntcgs#21%9tdnt*akwzpksq!1)xwuxytp*jsm#6=r6k4'
+SECRET_KEY = getenv('DJANGO_SECRET_KEY',
+                    'django-insecure-*(7dcnntcgs#21%9tdnt*akwzpksq!1)xwuxytp*jsm#6=r6k4')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv('DJANGO_DEBUG', '0') == '1'
 
 ALLOWED_HOSTS = [
         '0.0.0.0',
         '127.0.0.1',
         'localhost'
-                 ]
+                 ] + getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
@@ -121,6 +123,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
+DATABASE_DIR = BASE_DIR / 'database'
+DATABASE_DIR.mkdir(exist_ok=True)
 
 CACHES = {
     'default': {
@@ -139,7 +143,7 @@ CACHE_MIDDLEWARE_SECONDS = 200
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DATABASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -269,3 +273,30 @@ LOGGING = {
     }
 }
 
+LOGLEVEL = getenv('DJANGO_LOGLEVEL', 'info').upper()
+
+logging.config.dictConfig({
+    "version": 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': "%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(message)s"
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': "logging.StreamHandler",
+            'formatter': 'console',
+
+        },
+    },
+    'loggers': {
+        '': {
+            'level': LOGLEVEL,
+            'hand;ers': [
+                'console'
+            ]
+        },
+    },
+
+})

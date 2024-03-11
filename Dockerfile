@@ -12,3 +12,5 @@ RUN pip install django-debug-toolbar
 RUN pip install drf-spectacular
 
 COPY mysite .
+
+CMD ["gunicorn", "mysite.wsgi:application", "--bind", "0.0.0.0:8000"]
